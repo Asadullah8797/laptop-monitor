@@ -19,8 +19,8 @@ try {
 }
 
 # Send Telegram Alert
-$BOT_TOKEN = "8469309529:AAH1kdLYjtwee39EAgULMJa64Db_xRnWpYw"
-$CHAT_ID = "1361241039"
+$BOT_TOKEN = "Your Token Id"
+$CHAT_ID = "your chat id"
 $computerName = $env:COMPUTERNAME
 $userName = $env:USERNAME
 $time = Get-Date -Format "dd-MM-yyyy HH:mm:ss"
